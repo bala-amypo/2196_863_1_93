@@ -8,7 +8,7 @@ import jakarta.validation.constraints.*;
 public class User{
 
     @Id
-    @GenerateValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank(message = "Name is required")
@@ -22,7 +22,7 @@ public class User{
     private String email;
 
     @NotBlank(message = "Password is required")
-    @Size(min = 6,message = "Password msut be at least 6 characters")
+    @Size(min = 6,message = "Password must be at least 6 characters")
     @Column(nullable = false)
     private String password;
 
@@ -37,7 +37,7 @@ public class User{
         this.name = name;
         this.email = email;
         this.password = password;
-        this.role = "User";
+        this.role = "USER";
     }
 
     public User(String name , String email,String password,String role){
