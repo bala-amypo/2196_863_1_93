@@ -30,7 +30,7 @@ public class User{
     private String role = "USER";
 
     public User(){
-        this.role = "USER";
+        
     }
 
     public User(String name , String email,String password){
