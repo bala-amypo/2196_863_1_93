@@ -25,4 +25,22 @@ public class User{
     @Size(min = 6,message = "Password msut be at least 6 characters")
     @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false)
+    private String role = "USER";
+
+    public User(){
+        this.role = "USER";
+    }
+
+    public User(String name , String email,String password,String role){
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
+    public Long getId(){
+        return id;
+    }
+
 }
