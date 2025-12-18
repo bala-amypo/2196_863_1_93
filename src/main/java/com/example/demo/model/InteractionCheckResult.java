@@ -13,12 +13,12 @@ public class User{
 
     @NotBlank(message = "Name is required")
     @Size(min = 2,max = 100,message = "Name must be between 2 and 100 characters")
-    @Column(nullable =  false)
+    @Column(nullable =  false,length = 100)
     private String name;
 
     @NotBlank(message = "Email is required")
     @Email(message = "Email should be valid")
-    @Column(nullable =  false, unique= true)
+    @Column(nullable =  false, unique= true,length = 150)
     private String email;
 
     @NotBlank(message = "Password is required")
