@@ -1,3 +1,4 @@
 package com.example.demo.model;
 
-import jakarta
+import jakarta.persistence.*;//annotation
+import java.time.LocalDate
