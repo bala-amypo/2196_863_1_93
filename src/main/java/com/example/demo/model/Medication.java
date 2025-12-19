@@ -43,6 +43,12 @@ public class Medication{
     public Set<ActivationIngredient> getIngredients(){
         return ingredients;
     }
+    public void setIngredients(SetActiveIngredient> ingredients){
+        this.ingredients = ingredients;
+    }
+    public void addIngredient(ActiveIngredient ingredient){
+        this.ingredients.add(ing)
+    }
 
 }
 
