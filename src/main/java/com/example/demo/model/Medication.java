@@ -13,8 +13,18 @@ public class Medication{
     private String name;
 
     @ManyToMany
-    @JoinTable{
+    @JoinTable(
         name = "medication_ingredients",joinColumns = @JoinColumn(name = "medication_id"), inverseJoinColumns = @JoinColumn(name = "ingredients_id")
+    )
+    @JsonIgnore
+    private Set<ActiveIngredient> ingredients = new HashSet<>();
+
+    public Medication(){
+
+    }
+    public Mediaction(String name){
+        this.name = name;
+        this.ingredients
     }
 }
 
