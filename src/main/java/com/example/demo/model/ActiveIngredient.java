@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "active_ingredients")
-public class ActiveIngreddient{
+public class ActiveIngredient{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
