@@ -1,4 +1,5 @@
 package com.example.demo.model;
+
 import jakarta.persistence.*;
 import java.util.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -23,7 +24,7 @@ public class Medication{
     public Medication(){
 
     }
-    public Mediaction(String name){
+    public Medication(String name){
         this.name = name;
         this.ingredients = new HashSet<>();
     }
@@ -41,10 +42,10 @@ public class Medication{
     public void setName(String name){
         this.name = name;
     }
-    public Set<ActivationIngredient> getIngredients(){
+    public Set<ActivatIngredient> getIngredients(){
         return ingredients;
     }
-    public void setIngredients(SetActiveIngredient> ingredients){
+    public void setIngredients(Set<ActiveIngredient> ingredients){
         this.ingredients = ingredients;
     }
     public void addIngredient(ActiveIngredient ingredient){
