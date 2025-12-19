@@ -13,6 +13,9 @@ public class ActiveIngredient{
     @Column(nullable =  false, unique= true)
     private String name;
 
+    @ManytoMany(mappedBy = "ingredients")
+    private Set<Medication
+
     public ActiveIngredient(){
 
     }
