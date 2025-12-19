@@ -16,7 +16,7 @@ public class Medication{
 
     @ManyToMany
     @JoinTable(
-        name = "medication_ingredients",joinColumns = @JoinColumn(name = "medication_id"), inverseJoinColumns = @JoinColumn(name = "ingredients_id")
+        name = "medication_ingredients",joinColumns = @JoinColumn(name = "medication_id"), inverseJoinColumns = @JoinColumn(name = "ingredient_id")
     )
     @JsonIgnore
     private Set<ActiveIngredient> ingredients = new HashSet<>();
@@ -42,7 +42,7 @@ public class Medication{
     public void setName(String name){
         this.name = name;
     }
-    public Set<ActivetIngredient> getIngredients(){
+    public Set<ActiveIngredient> getIngredients(){
         return ingredients;
     }
     public void setIngredients(Set<ActiveIngredient> ingredient){
