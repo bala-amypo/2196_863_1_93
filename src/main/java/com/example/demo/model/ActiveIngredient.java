@@ -14,7 +14,7 @@ public class ActiveIngredient{
     @Column(nullable =  false, unique= true)
     private String name;
 
-    @ManytoMany(mappedBy = "ingredients")
+    @ManyToMany(mappedBy = "ingredients")
     private Set<Medication> medications = new HashSet<>();
 
     public ActiveIngredient(){
