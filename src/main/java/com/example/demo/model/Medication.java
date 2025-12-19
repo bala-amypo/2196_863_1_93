@@ -1,6 +1,7 @@
 package com.example.demo.model;
 import jakarta.persistence.*;
 import java.util.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "medications")
@@ -47,7 +48,10 @@ public class Medication{
         this.ingredients = ingredients;
     }
     public void addIngredient(ActiveIngredient ingredient){
-        this.ingredients.add(ing)
+        this.ingredients.add(ingredient);
+    }
+    public void removeIngredient(ActiveIngredient ingredient){
+        this.ingredients.remove(ingredient);
     }
 
 }
