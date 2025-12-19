@@ -14,7 +14,7 @@ public class ActiveIngredient{
     private String name;
 
     @ManytoMany(mappedBy = "ingredients")
-    private Set<Medication
+    private Set<Medication> medications = new HashSet<>();
 
     public ActiveIngredient(){
 
@@ -36,5 +36,14 @@ public class ActiveIngredient{
     public void setName(String name){
         this.name = name;
     }
+
+    private Set<Medication> getMedications(){
+        return medications
+    }
+
+    public void setMedications(Set<Medication> medications){
+        this.medications = medications;
+    }
+    
 
 }
