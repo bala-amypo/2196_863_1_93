@@ -42,10 +42,10 @@ public class Medication{
     public void setName(String name){
         this.name = name;
     }
-    public Set<ActivatIngredient> getIngredients(){
+    public Set<ActivetIngredient> getIngredients(){
         return ingredients;
     }
-    public void setIngredients(Set<ActiveIngredient> ingredients){
+    public void setIngredients(Set<ActiveIngredient> ingredient){
         this.ingredients = ingredients;
     }
     public void addIngredient(ActiveIngredient ingredient){
