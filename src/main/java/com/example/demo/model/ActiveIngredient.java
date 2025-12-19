@@ -38,7 +38,7 @@ public class ActiveIngredient{
         this.name = name;
     }
 
-    private Set<Medication> getMedications(){
+    public Set<Medication> getMedications(){
         return medications;
     }
 
