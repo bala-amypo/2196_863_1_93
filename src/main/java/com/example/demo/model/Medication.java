@@ -14,7 +14,7 @@ public class Medication{
 
     @ManyToMany
     @JoinTable{
-        name = "medication_ingr"
+        name = "medication_ingredients",joinColumns = @JoinColumn(name = "medication_id"), inverseJoinColumns = @JoinColumn(name = "ingredients_id")
     }
 }
 
