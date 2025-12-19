@@ -45,7 +45,7 @@ public class Medication{
     public Set<ActiveIngredient> getIngredients(){
         return ingredients;
     }
-    public void setIngredients(Set<ActiveIngredient> ingredient){
+    public void setIngredients(Set<ActiveIngredient> ingredients){
         this.ingredients = ingredients;
     }
     public void addIngredient(ActiveIngredient ingredient){
