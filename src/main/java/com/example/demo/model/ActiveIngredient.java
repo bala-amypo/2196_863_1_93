@@ -39,7 +39,7 @@ public class ActiveIngredient{
     }
 
     private Set<Medication> getMedications(){
-        return medications
+        return medications;
     }
 
     public void setMedications(Set<Medication> medications){
