@@ -14,20 +14,18 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Override
-    public User registerUser(String name, String email, String password, String role) {
-        if (userRepository.findByEmail(email).isPresent()) {
-            throw new RuntimeException("Email already exists");
-        }
-
-        User user = new User();
-        user.setName(name);
-        user.setEmail(email);
-        // Store password directly (no encoding as per syllabus)
-        user.setPassword(password);
-        user.setRole(role != null ? role : "USER");
-
-        return userRepository.save(user);
+public User registerUser(User user) {
+    if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+        throw new RuntimeException("Email already exists");
     }
+
+    if (user.getRole() == null) {
+        user.setRole("USER");
+    }
+
+    return userRepository.save(user);
+}
+
 
     @Override
     public User authenticateUser(String email, String password) {
