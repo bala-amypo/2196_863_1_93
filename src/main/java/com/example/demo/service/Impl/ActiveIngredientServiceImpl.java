@@ -18,6 +18,12 @@ public class ActiveIngredientServiceImpl implements ActiveIngredientService {
 
     @Override
     public ActiveIngredient save(ActiveIngredient activeIngredient) {
+        if (activeIngredient == null) {
+            throw new IllegalArgumentException("ActiveIngredient cannot be null");
+        }
+        if (activeIngredient.getName() == null || activeIngredient.getName().trim().isEmpty()) {
+            throw new IllegalArgumentException("ActiveIngredient name cannot be null or empty");
+        }
         return repository.save(activeIngredient);
     }
 
@@ -34,6 +40,12 @@ public class ActiveIngredientServiceImpl implements ActiveIngredientService {
 
     @Override
     public ActiveIngredient update(Long id, ActiveIngredient activeIngredient) {
+        if (activeIngredient == null) {
+            throw new IllegalArgumentException("ActiveIngredient cannot be null");
+        }
+        if (activeIngredient.getName() == null || activeIngredient.getName().trim().isEmpty()) {
+            throw new IllegalArgumentException("ActiveIngredient name cannot be null or empty");
+        }
         ActiveIngredient existing = findById(id);
         existing.setName(activeIngredient.getName());
         return repository.save(existing);
