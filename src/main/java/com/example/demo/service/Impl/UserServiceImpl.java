@@ -14,25 +14,38 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Override
-public User registerUser(User user) {
-    if (userRepository.findByEmail(user.getEmail()).isPresent()) {
-        throw new RuntimeException("Email already exists");
+    public User registerUser(User user) {
+
+        // Check required fields manually (optional, but prevents DB errors)
+        if (user.getName() == null || user.getName().isBlank()) {
+            throw new RuntimeException("Name is required");
+        }
+        if (user.getEmail() == null || user.getEmail().isBlank()) {
+            throw new RuntimeException("Email is required");
+        }
+        if (user.getPassword() == null || user.getPassword().isBlank()) {
+            throw new RuntimeException("Password is required");
+        }
+
+        // Check duplicate email
+        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+            throw new RuntimeException("Email already exists");
+        }
+
+        // Set default role if missing
+        if (user.getRole() == null || user.getRole().isBlank()) {
+            user.setRole("USER");
+        }
+
+        return userRepository.save(user);
     }
-
-    if (user.getRole() == null) {
-        user.setRole("USER");
-    }
-
-    return userRepository.save(user);
-}
-
 
     @Override
     public User authenticateUser(String email, String password) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        // Simple password check (no security)
+        // Simple password check
         if (!user.getPassword().equals(password)) {
             throw new RuntimeException("Invalid credentials");
         }
@@ -52,4 +65,3 @@ public User registerUser(User user) {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 }
-
