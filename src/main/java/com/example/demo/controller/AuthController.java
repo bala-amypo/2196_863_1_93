@@ -38,40 +38,24 @@ public class AuthController {
             return ResponseEntity.badRequest().body(errors);
         }
 
-        try {
-            User registeredUser = userService.registerUser(user);
-            return ResponseEntity.status(HttpStatus.CREATED).body(registeredUser);
-        } catch (RuntimeException e) {
-            // Handles email already exists or other runtime exceptions
-            Map<String, String> error = new HashMap<>();
-            error.put("error", e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
-        } catch (Exception e) {
-            // Catch-all for unexpected errors
-            Map<String, String> error = new HashMap<>();
-            error.put("error", "Internal server error");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
-        }
+        // Let service throw exceptions; handled globally
+        User registeredUser = userService.registerUser(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(registeredUser);
     }
 
     @PostMapping("/login")
     @Operation(summary = "User login", description = "Authenticates user and returns a token")
     public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, String> loginRequest) {
-        try {
-            String email = loginRequest.get("email");
-            String password = loginRequest.get("password");
 
-            User user = userService.authenticateUser(email, password);
+        String email = loginRequest.get("email");
+        String password = loginRequest.get("password");
 
-            Map<String, Object> response = new HashMap<>();
-            response.put("user", user);
-            response.put("token", "simple-token-" + user.getId());
+        User user = userService.authenticateUser(email, password);
 
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            Map<String, String> error = new HashMap<>();
-            error.put("error", "Invalid email or password");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
-        }
+        Map<String, Object> response = new HashMap<>();
+        response.put("user", user);
+        response.put("token", "simple-token-" + user.getId());
+
+        return ResponseEntity.ok(response);
     }
 }
