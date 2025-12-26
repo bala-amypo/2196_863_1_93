@@ -1,6 +1,8 @@
 package com.example.demo.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import java.util.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -11,6 +13,8 @@ public class Medication{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Medication name is required")
+    @Size(min = 2, max = 100, message = "Medication name must be between 2 and 100 characters")
     @Column(nullable = false)
     private String name;
 

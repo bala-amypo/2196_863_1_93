@@ -4,10 +4,12 @@ import com.example.demo.model.InteractionCheckResult;
 import com.example.demo.service.InteractionCheckResultService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
@@ -23,20 +25,23 @@ public class InteractionCheckResultController {
 
     @PostMapping("/check")
     @Operation(summary = "Check drug interactions", description = "Check for interactions between medications")
-    public ResponseEntity<InteractionCheckResult> checkInteractions(@RequestBody List<Long> medicationIds) {
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public ResponseEntity<InteractionCheckResult> checkInteractions(@Valid @RequestBody List<Long> medicationIds) {
         InteractionCheckResult result = service.checkInteractions(medicationIds);
         return ResponseEntity.ok(result);
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Get interaction result by ID", description = "Retrieve a specific interaction check result")
-    public ResponseEntity<InteractionCheckResult> getById(@PathVariable Long id) {
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public ResponseEntity<InteractionCheckResult> getById(@PathVariable @NotNull Long id) {
         InteractionCheckResult result = service.findById(id);
         return ResponseEntity.ok(result);
     }
 
     @GetMapping
     @Operation(summary = "Get all interaction results", description = "Retrieve all interaction check results")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<InteractionCheckResult>> getAll() {
         List<InteractionCheckResult> results = service.findAll();
         return ResponseEntity.ok(results);
@@ -44,6 +49,7 @@ public class InteractionCheckResultController {
 
     @GetMapping("/history")
     @Operation(summary = "Get interaction check history", description = "Retrieve interaction check history ordered by date")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<List<InteractionCheckResult>> getHistory() {
         List<InteractionCheckResult> history = service.getCheckHistory();
         return ResponseEntity.ok(history);
@@ -51,7 +57,8 @@ public class InteractionCheckResultController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete interaction result", description = "Delete a specific interaction check result")
-    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> deleteById(@PathVariable @NotNull Long id) {
         service.deleteById(id);
         return ResponseEntity.noContent().build();
     }
