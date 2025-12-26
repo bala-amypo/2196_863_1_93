@@ -3,7 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.model.InteractionCheckResult;
 import com.example.demo.model.Medication;
 import com.example.demo.service.InteractionCheckResultService;
-import com.example.demo.service.MedicationService;
+import com.example.demo.service.CatalogService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ import java.util.List;
 public class MedicationController {
 
     @Autowired
-    private MedicationService medicationService;
+    private CatalogService catalogService;
 
     @Autowired
     private InteractionCheckResultService interactionService;
@@ -26,13 +26,13 @@ public class MedicationController {
     @GetMapping
     @Operation(summary = "Get all medications", description = "Retrieves a list of all medications")
     public ResponseEntity<List<Medication>> getAllMedications() {
-        return ResponseEntity.ok(medicationService.getAllMedications());
+        return ResponseEntity.ok(catalogService.getAllMedications());
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Get medication by ID", description = "Retrieves a specific medication by its ID")
     public ResponseEntity<Medication> getMedication(@PathVariable Long id) {
-        return ResponseEntity.ok(medicationService.findById(id));
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping("/check-interactions")
