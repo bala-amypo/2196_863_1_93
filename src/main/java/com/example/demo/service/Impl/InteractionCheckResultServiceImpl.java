@@ -5,6 +5,7 @@ import com.example.demo.model.InteractionCheckResult;
 import com.example.demo.repository.InteractionCheckResultRepository;
 import com.example.demo.service.InteractionCheckResultService;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
@@ -40,9 +41,14 @@ public class InteractionCheckResultServiceImpl implements InteractionCheckResult
         if (result == null) {
             throw new IllegalArgumentException("InteractionCheckResult cannot be null");
         }
+
         InteractionCheckResult existing = findById(id);
-        existing.setMedications(result.getMedications());
-        existing.setInteractions(result.getInteractions());
+
+        // ✔ correct methods
+        existing.setMedicationIds(result.getMedicationIds());
+        existing.setHasInteractions(result.isHasInteractions());
+        existing.setResultSummary(result.getResultSummary());
+
         return repository.save(existing);
     }
 
@@ -56,10 +62,14 @@ public class InteractionCheckResultServiceImpl implements InteractionCheckResult
         if (medicationIds == null) {
             throw new IllegalArgumentException("Medication IDs cannot be null");
         }
-        
+
         InteractionCheckResult result = new InteractionCheckResult();
-        result.setMedications(medicationIds.toString());
-        result.setInteractions("{\"interactions\": []}");
+
+        // ✔ correct entity mapping
+        result.setMedicationIds(medicationIds);
+        result.setHasInteractions(false); // placeholder logic
+        result.setResultSummary("No interactions found");
+
         return repository.save(result);
     }
 
