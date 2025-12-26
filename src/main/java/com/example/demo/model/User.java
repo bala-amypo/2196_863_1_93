@@ -32,14 +32,23 @@ public class User {
     private String password;
 
     @Column(nullable = false)
-    private String role;
+    private String role = "USER"; // Default role
 
     /* ================= Constructors ================= */
 
     public User() {
-        // Default constructor
+        this.role = "USER"; // Ensure default role in no-arg constructor
     }
 
+    // 3-parameter constructor (used by tests)
+    public User(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.role = "USER"; // Default to USER role
+    }
+
+    // 4-parameter constructor (for flexibility)
     public User(String name, String email, String password, String role) {
         this.name = name;
         this.email = email;
