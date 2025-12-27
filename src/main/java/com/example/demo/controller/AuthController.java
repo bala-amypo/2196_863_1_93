@@ -38,8 +38,8 @@ public class AuthController {
             return ResponseEntity.badRequest().body(errors);
         }
 
-        // Let service throw exceptions; handled globally
-        User registeredUser = userService.registerUser(user);
+        // Changed registerUser() to register()
+        User registeredUser = userService.register(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(registeredUser);
     }
 
