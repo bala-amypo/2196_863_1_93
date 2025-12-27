@@ -13,6 +13,10 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
+    // ADD THIS NO-ARG CONSTRUCTOR
+    public UserServiceImpl() {
+    }
+
     @Override
     public User register(User user) {
         // Check required fields manually (optional, but prevents DB errors)
