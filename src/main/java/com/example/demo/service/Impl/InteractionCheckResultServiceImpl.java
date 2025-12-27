@@ -44,10 +44,9 @@ public class InteractionCheckResultServiceImpl implements InteractionCheckResult
 
         InteractionCheckResult existing = findById(id);
 
-        // ✔ correct methods
-        existing.setMedicationIds(result.getMedicationIds());
-        existing.setHasInteractions(result.isHasInteractions());
-        existing.setResultSummary(result.getResultSummary());
+        // Updated to match new field names
+        existing.setMedications(result.getMedications());
+        existing.setInteractions(result.getInteractions());
 
         return repository.save(existing);
     }
@@ -59,22 +58,26 @@ public class InteractionCheckResultServiceImpl implements InteractionCheckResult
 
     @Override
     public InteractionCheckResult checkInteractions(List<Long> medicationIds) {
-        if (medicationIds == null) {
-            throw new IllegalArgumentException("Medication IDs cannot be null");
+        if (medicationIds == null || medicationIds.isEmpty()) {
+            throw new IllegalArgumentException("Medication IDs cannot be null or empty");
         }
 
-        InteractionCheckResult result = new InteractionCheckResult();
+        // Convert medication IDs to a comma-separated string
+        String medications = medicationIds.stream()
+                .map(String::valueOf)
+                .reduce((a, b) -> a + ", " + b)
+                .orElse("");
 
-        // ✔ correct entity mapping
-        result.setMedicationIds(medicationIds);
-        result.setHasInteractions(false); // placeholder logic
-        result.setResultSummary("No interactions found");
+        // Create result with placeholder JSON
+        String interactions = "{\"totalInteractions\": 0, \"interactions\": []}";
+
+        InteractionCheckResult result = new InteractionCheckResult(medications, interactions);
 
         return repository.save(result);
     }
 
     @Override
     public List<InteractionCheckResult> getCheckHistory() {
-        return repository.findAllByOrderByCheckDateDesc();
+        return repository.findAllByOrderByCheckedAtDesc();
     }
 }
