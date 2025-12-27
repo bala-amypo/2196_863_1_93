@@ -17,31 +17,29 @@ public class InteractionCheckResult {
     @Column(columnDefinition = "TEXT")
     private String interactions;
 
-    @Column(name = "has_interactions", nullable = false)
-    private boolean hasInteractions = false;   // ⭐ IMPORTANT
-
-    @Column(name = "checked_at", nullable = false)
-    private LocalDateTime checkedAt = LocalDateTime.now();
+    @Column(nullable = false)
+    private LocalDateTime checkedAt;
 
     /* ================= Constructors ================= */
 
     public InteractionCheckResult() {
         this.checkedAt = LocalDateTime.now();
-        this.hasInteractions = false;
     }
 
     public InteractionCheckResult(String medications, String interactions) {
         this.medications = medications;
         this.interactions = interactions;
-        this.hasInteractions =
-                interactions != null && !interactions.isBlank();
         this.checkedAt = LocalDateTime.now();
     }
 
-    /* ================= Getters & Setters ================= */
+    /* ================= Getters and Setters ================= */
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getMedications() {
@@ -58,19 +56,13 @@ public class InteractionCheckResult {
 
     public void setInteractions(String interactions) {
         this.interactions = interactions;
-        this.hasInteractions =
-                interactions != null && !interactions.isBlank();
-    }
-
-    public boolean isHasInteractions() {
-        return hasInteractions;
-    }
-
-    public void setHasInteractions(boolean hasInteractions) {
-        this.hasInteractions = hasInteractions;
     }
 
     public LocalDateTime getCheckedAt() {
         return checkedAt;
+    }
+
+    public void setCheckedAt(LocalDateTime checkedAt) {
+        this.checkedAt = checkedAt;
     }
 }
