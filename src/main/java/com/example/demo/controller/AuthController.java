@@ -1,16 +1,18 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.*;
 import com.example.demo.model.User;
 import com.example.demo.service.UserService;
-import com.example.demo.util.JwtUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
@@ -18,33 +20,42 @@ import jakarta.validation.Valid;
 public class AuthController {
 
     private final UserService userService;
-    private final JwtUtil jwtUtil;
 
-    public AuthController(UserService userService, JwtUtil jwtUtil) {
+    public AuthController(UserService userService) {
         this.userService = userService;
-        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/register")
     @Operation(summary = "Register a new user", description = "Creates a new user account")
-    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
-        User user = new User(request.getName(), request.getEmail(), request.getPassword(), request.getRole());
-        User registeredUser = userService.registerUser(user);
-        
-        String token = jwtUtil.generateToken(registeredUser.getEmail(), registeredUser.getId(), registeredUser.getRole());
-        AuthResponse response = new AuthResponse(token, registeredUser.getId(), registeredUser.getEmail(), registeredUser.getRole());
-        
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    public ResponseEntity<?> register(@Valid @RequestBody User user, BindingResult result) {
+
+        // Handle validation errors
+        if (result.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+            for (FieldError error : result.getFieldErrors()) {
+                errors.put(error.getField(), error.getDefaultMessage());
+            }
+            return ResponseEntity.badRequest().body(errors);
+        }
+
+        // Changed registerUser() to register()
+        User registeredUser = userService.register(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(registeredUser);
     }
 
     @PostMapping("/login")
-    @Operation(summary = "User login", description = "Authenticates user and returns JWT token")
-    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
-        User user = userService.authenticateUser(request.getEmail(), request.getPassword());
-        
-        String token = jwtUtil.generateToken(user.getEmail(), user.getId(), user.getRole());
-        AuthResponse response = new AuthResponse(token, user.getId(), user.getEmail(), user.getRole());
-        
+    @Operation(summary = "User login", description = "Authenticates user and returns a token")
+    public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, String> loginRequest) {
+
+        String email = loginRequest.get("email");
+        String password = loginRequest.get("password");
+
+        User user = userService.authenticateUser(email, password);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("user", user);
+        response.put("token", "simple-token-" + user.getId());
+
         return ResponseEntity.ok(response);
     }
 }
