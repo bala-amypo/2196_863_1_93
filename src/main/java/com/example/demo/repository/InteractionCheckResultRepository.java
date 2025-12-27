@@ -6,8 +6,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface InteractionCheckResultRepository
-        extends JpaRepository<InteractionCheckResult, Long> {
-
-    List<InteractionCheckResult> findAllByOrderByCheckDateDesc();
+public interface InteractionCheckResultRepository extends JpaRepository<InteractionCheckResult, Long> {
+    List<InteractionCheckResult> findAllByOrderByCheckedAtDesc();
 }
