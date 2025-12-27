@@ -2,7 +2,6 @@ package com.example.demo.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Table(name = "interaction_check_results")
@@ -12,26 +11,28 @@ public class InteractionCheckResult {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ElementCollection
-    @CollectionTable(
-        name = "interaction_check_medications",
-        joinColumns = @JoinColumn(name = "result_id")
-    )
-    @Column(name = "medication_id")
-    private List<Long> medicationIds;
-
-    private boolean hasInteractions;
+    @Column(nullable = false)
+    private String medications;
 
     @Column(columnDefinition = "TEXT")
-    private String resultSummary;
+    private String interactions;
 
-    private LocalDateTime checkDate;
+    @Column(nullable = false)
+    private LocalDateTime checkedAt;
+
+    /* ================= Constructors ================= */
 
     public InteractionCheckResult() {
-        this.checkDate = LocalDateTime.now();
+        this.checkedAt = LocalDateTime.now();
     }
 
-    /* ===== Getters and Setters ===== */
+    public InteractionCheckResult(String medications, String interactions) {
+        this.medications = medications;
+        this.interactions = interactions;
+        this.checkedAt = LocalDateTime.now();
+    }
+
+    /* ================= Getters and Setters ================= */
 
     public Long getId() {
         return id;
@@ -41,35 +42,27 @@ public class InteractionCheckResult {
         this.id = id;
     }
 
-    public List<Long> getMedicationIds() {
-        return medicationIds;
+    public String getMedications() {
+        return medications;
     }
 
-    public void setMedicationIds(List<Long> medicationIds) {
-        this.medicationIds = medicationIds;
+    public void setMedications(String medications) {
+        this.medications = medications;
     }
 
-    public boolean isHasInteractions() {
-        return hasInteractions;
+    public String getInteractions() {
+        return interactions;
     }
 
-    public void setHasInteractions(boolean hasInteractions) {
-        this.hasInteractions = hasInteractions;
+    public void setInteractions(String interactions) {
+        this.interactions = interactions;
     }
 
-    public String getResultSummary() {
-        return resultSummary;
+    public LocalDateTime getCheckedAt() {
+        return checkedAt;
     }
 
-    public void setResultSummary(String resultSummary) {
-        this.resultSummary = resultSummary;
-    }
-
-    public LocalDateTime getCheckDate() {
-        return checkDate;
-    }
-
-    public void setCheckDate(LocalDateTime checkDate) {
-        this.checkDate = checkDate;
+    public void setCheckedAt(LocalDateTime checkedAt) {
+        this.checkedAt = checkedAt;
     }
 }
