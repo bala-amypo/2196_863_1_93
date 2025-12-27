@@ -72,6 +72,7 @@ public class InteractionCheckResultServiceImpl implements InteractionCheckResult
         String interactions = "{\"totalInteractions\": 0, \"interactions\": []}";
 
         InteractionCheckResult result = new InteractionCheckResult(medications, interactions);
+        // The constructor will automatically set hasInteractions to false for this case
 
         return repository.save(result);
     }
