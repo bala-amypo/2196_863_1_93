@@ -29,16 +29,19 @@ public class ActiveIngredientController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ActiveIngredient> getById(@PathVariable Long id) {
-        return ResponseEntity.notFound().build();
+        ActiveIngredient ingredient = catalogService.getIngredientById(id);
+        return ResponseEntity.ok(ingredient);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ActiveIngredient> update(@PathVariable Long id, @RequestBody ActiveIngredient ingredient) {
-        return ResponseEntity.notFound().build();
+        ActiveIngredient updated = catalogService.updateIngredient(id, ingredient);
+        return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        return ResponseEntity.notFound().build();
+        catalogService.deleteIngredient(id);
+        return ResponseEntity.noContent().build();
     }
 }
