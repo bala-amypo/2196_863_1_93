@@ -1,44 +1,55 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    @Autowired
+    private UserRepository userRepository;
 
-    public UserServiceImpl(UserRepository userRepository,
-                           PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
+    // ADD THIS NO-ARG CONSTRUCTOR
+    public UserServiceImpl() {
     }
 
     @Override
     public User register(User user) {
-
-        // Default role
-        if (user.getRole() == null || user.getRole().isEmpty()) {
-            user.setRole("USER");
+        // Check required fields manually (optional, but prevents DB errors)
+        if (user.getName() == null || user.getName().isBlank()) {
+            throw new RuntimeException("Name is required");
+        }
+        if (user.getEmail() == null || user.getEmail().isBlank()) {
+            throw new RuntimeException("Email is required");
+        }
+        if (user.getPassword() == null || user.getPassword().isBlank()) {
+            throw new RuntimeException("Password is required");
         }
 
-        // Encode password
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        // Check duplicate email
+        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+            throw new RuntimeException("Email already exists");
+        }
+
+        // Set default role if missing
+        if (user.getRole() == null || user.getRole().isBlank()) {
+            user.setRole("USER");
+        }
 
         return userRepository.save(user);
     }
 
     @Override
     public User authenticateUser(String email, String password) {
-
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Invalid credentials"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        if (!passwordEncoder.matches(password, user.getPassword())) {
+        // Simple password check
+        if (!user.getPassword().equals(password)) {
             throw new RuntimeException("Invalid credentials");
         }
 
@@ -48,6 +59,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByEmail(String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+    }
+
+    @Override
+    public User findById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 }
