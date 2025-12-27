@@ -9,4 +9,7 @@ public interface CatalogService {
     Medication addMedication(Medication medication);
     List<ActiveIngredient> getAllIngredients();
     List<Medication> getAllMedications();
+    ActiveIngredient getIngredientById(Long id);
+    ActiveIngredient updateIngredient(Long id, ActiveIngredient ingredient);
+    void deleteIngredient(Long id);
 }
