@@ -3,13 +3,19 @@ package com.example.demo.service.impl;
 import com.example.demo.model.InteractionRule;
 import com.example.demo.repository.InteractionRuleRepository;
 import com.example.demo.service.RuleService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
 public class RuleServiceImpl implements RuleService {
     
-    private final InteractionRuleRepository ruleRepository;
+    @Autowired
+    private InteractionRuleRepository ruleRepository;
+    
+    // ADD THIS NO-ARG CONSTRUCTOR
+    public RuleServiceImpl() {
+    }
     
     public RuleServiceImpl(InteractionRuleRepository ruleRepository) {
         this.ruleRepository = ruleRepository;
