@@ -1,5 +1,7 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.LoginRequest;
+import com.example.demo.dto.RegisterRequest;
 import com.example.demo.model.User;
 import com.example.demo.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,7 +29,7 @@ public class AuthController {
 
     @PostMapping("/register")
     @Operation(summary = "Register a new user", description = "Creates a new user account")
-    public ResponseEntity<?> register(@Valid @RequestBody User user, BindingResult result) {
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request, BindingResult result) {
 
         // Handle validation errors
         if (result.hasErrors()) {
@@ -38,17 +40,17 @@ public class AuthController {
             return ResponseEntity.badRequest().body(errors);
         }
 
-        // Changed registerUser() to register()
+        User user = new User(request.getName(), request.getEmail(), request.getPassword(), request.getRole());
         User registeredUser = userService.register(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(registeredUser);
     }
 
     @PostMapping("/login")
     @Operation(summary = "User login", description = "Authenticates user and returns a token")
-    public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, String> loginRequest) {
+    public ResponseEntity<Map<String, Object>> login(@RequestBody LoginRequest loginRequest) {
 
-        String email = loginRequest.get("email");
-        String password = loginRequest.get("password");
+        String email = loginRequest.getEmail();
+        String password = loginRequest.getPassword();
 
         User user = userService.authenticateUser(email, password);
 
