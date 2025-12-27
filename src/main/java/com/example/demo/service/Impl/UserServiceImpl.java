@@ -14,8 +14,7 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Override
-    public User registerUser(User user) {
-
+    public User register(User user) {
         // Check required fields manually (optional, but prevents DB errors)
         if (user.getName() == null || user.getName().isBlank()) {
             throw new RuntimeException("Name is required");
