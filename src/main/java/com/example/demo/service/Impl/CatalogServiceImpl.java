@@ -66,4 +66,10 @@ public class CatalogServiceImpl implements CatalogService {
         ActiveIngredient existing = getIngredientById(id);
         ingredientRepository.delete(existing);
     }
+    
+    @Override
+    public Medication getMedicationById(Long id) {
+        return medicationRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Medication not found with id: " + id));
+    }
 }
