@@ -32,7 +32,8 @@ public class MedicationController {
     @GetMapping("/{id}")
     @Operation(summary = "Get medication by ID", description = "Retrieves a specific medication by its ID")
     public ResponseEntity<Medication> getMedication(@PathVariable Long id) {
-        return ResponseEntity.notFound().build();
+        Medication medication = catalogService.getMedicationById(id);
+        return ResponseEntity.ok(medication);
     }
 
     @PostMapping("/check-interactions")
