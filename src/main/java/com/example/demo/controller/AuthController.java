@@ -4,6 +4,7 @@ import com.example.demo.dto.LoginRequest;
 import com.example.demo.dto.RegisterRequest;
 import com.example.demo.model.User;
 import com.example.demo.service.UserService;
+import com.example.demo.util.JwtUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
@@ -22,9 +23,11 @@ import java.util.Map;
 public class AuthController {
 
     private final UserService userService;
+    private final JwtUtil jwtUtil;
 
-    public AuthController(UserService userService) {
+    public AuthController(UserService userService, JwtUtil jwtUtil) {
         this.userService = userService;
+        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/register")
@@ -54,9 +57,12 @@ public class AuthController {
 
         User user = userService.authenticateUser(email, password);
 
+        // Generate real JWT token
+        String jwtToken = jwtUtil.generateToken(user.getEmail(), user.getId(), user.getRole());
+
         Map<String, Object> response = new HashMap<>();
         response.put("user", user);
-        response.put("token", "simple-token-" + user.getId());
+        response.put("token", jwtToken);
 
         return ResponseEntity.ok(response);
     }
