@@ -7,4 +7,5 @@ public interface RuleService {
     InteractionRule addRule(InteractionRule rule);
     List<InteractionRule> getAllRules();
     InteractionRule findById(Long id);
+    List<InteractionRule> findInteractionsBetweenIngredients(List<Long> ingredientIds);
 }

@@ -35,4 +35,25 @@ public class RuleServiceImpl implements RuleService {
     public InteractionRule findById(Long id) {
         return ruleRepository.findById(id).orElse(null);
     }
+    
+    @Override
+    public List<InteractionRule> findInteractionsBetweenIngredients(List<Long> ingredientIds) {
+        List<InteractionRule> allInteractions = new java.util.ArrayList<>();
+        
+        // Check all pairs of ingredients
+        for (int i = 0; i < ingredientIds.size(); i++) {
+            for (int j = i + 1; j < ingredientIds.size(); j++) {
+                Long id1 = ingredientIds.get(i);
+                Long id2 = ingredientIds.get(j);
+                
+                // Check both directions (A,B) and (B,A)
+                java.util.Optional<InteractionRule> rule = ruleRepository.findRuleBetweenIngredients(id1, id2);
+                if (rule.isPresent()) {
+                    allInteractions.add(rule.get());
+                }
+            }
+        }
+        
+        return allInteractions;
+    }
 }

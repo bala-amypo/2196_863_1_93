@@ -12,4 +12,5 @@ public interface CatalogService {
     ActiveIngredient getIngredientById(Long id);
     ActiveIngredient updateIngredient(Long id, ActiveIngredient ingredient);
     void deleteIngredient(Long id);
+    Medication getMedicationById(Long id);
 }

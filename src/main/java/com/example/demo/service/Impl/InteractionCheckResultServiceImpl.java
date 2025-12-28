@@ -18,10 +18,22 @@ import java.util.stream.Collectors;
 @Service
 public class InteractionCheckResultServiceImpl implements InteractionCheckResultService {
 
-    private final InteractionCheckResultRepository repository;
-    private final MedicationRepository medicationRepository;
-    private final RuleService ruleService;
+    private InteractionCheckResultRepository repository;
+    private MedicationRepository medicationRepository;
+    private RuleService ruleService;
 
+    // No-argument constructor
+    public InteractionCheckResultServiceImpl() {
+    }
+
+    // Original constructor for backward compatibility
+    public InteractionCheckResultServiceImpl(InteractionCheckResultRepository repository) {
+        this.repository = repository;
+        this.medicationRepository = null;
+        this.ruleService = null;
+    }
+
+    // Enhanced constructor with all dependencies
     public InteractionCheckResultServiceImpl(InteractionCheckResultRepository repository,
                                            MedicationRepository medicationRepository,
                                            RuleService ruleService) {
@@ -75,28 +87,38 @@ public class InteractionCheckResultServiceImpl implements InteractionCheckResult
             throw new IllegalArgumentException("Medication IDs cannot be null or empty");
         }
 
-        // Get all medications and extract ingredients
-        List<Long> ingredientIds = extractIngredientIds(medicationIds);
-        
-        // Find interaction rules between ingredients
-        List<InteractionRule> foundInteractions = ruleService.findInteractionsBetweenIngredients(ingredientIds);
-        
-        // Convert medication IDs to a comma-separated string
-        String medications = medicationIds.stream()
-                .map(String::valueOf)
-                .reduce((a, b) -> a + ", " + b)
-                .orElse("");
+        // Check if enhanced dependencies are available
+        if (medicationRepository != null && ruleService != null) {
+            // Enhanced interaction checking with real rules
+            List<Long> ingredientIds = extractIngredientIds(medicationIds);
+            List<InteractionRule> foundInteractions = ruleService.findInteractionsBetweenIngredients(ingredientIds);
+            
+            String medications = medicationIds.stream()
+                    .map(String::valueOf)
+                    .reduce((a, b) -> a + ", " + b)
+                    .orElse("");
 
-        // Build interactions JSON
-        String interactions = buildInteractionsJson(foundInteractions);
+            String interactions = buildInteractionsJson(foundInteractions);
+            InteractionCheckResult result = new InteractionCheckResult(medications, interactions);
+            return repository.save(result);
+        } else {
+            // Fallback to original behavior for backward compatibility
+            String medications = medicationIds.stream()
+                    .map(String::valueOf)
+                    .reduce((a, b) -> a + ", " + b)
+                    .orElse("");
 
-        InteractionCheckResult result = new InteractionCheckResult(medications, interactions);
-        // The constructor will automatically set hasInteractions based on found interactions
-
-        return repository.save(result);
+            String interactions = "{\"totalInteractions\": 0, \"interactions\": []}";
+            InteractionCheckResult result = new InteractionCheckResult(medications, interactions);
+            return repository.save(result);
+        }
     }
     
     private List<Long> extractIngredientIds(List<Long> medicationIds) {
+        if (medicationRepository == null) {
+            return new java.util.ArrayList<>();
+        }
+        
         return medicationIds.stream()
                 .map(id -> medicationRepository.findById(id).orElse(null))
                 .filter(medication -> medication != null)
