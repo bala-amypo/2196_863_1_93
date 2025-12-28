@@ -26,6 +26,16 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
+        String path = request.getRequestURI();
+        
+        // Skip JWT processing for permitted paths
+        if (path.equals("/") || path.startsWith("/auth/") || path.startsWith("/h2-console/") || 
+            path.startsWith("/swagger-ui/") || path.equals("/swagger-ui.html") || 
+            path.startsWith("/v3/api-docs/") || path.startsWith("/api-docs/") || path.startsWith("/webjars/")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         final String authorizationHeader = request.getHeader("Authorization");
 
         String username = null;
