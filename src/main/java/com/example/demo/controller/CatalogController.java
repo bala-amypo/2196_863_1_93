@@ -25,7 +25,7 @@ public class CatalogController {
     @Autowired
     private InteractionCheckResultService interactionService;
 
-    // ================= MEDICATION ENDPOINTS =================
+    
 
     @GetMapping("/medications")
     @Operation(summary = "Get all medications", description = "Retrieves a list of all medications")
@@ -54,7 +54,6 @@ public class CatalogController {
         return ResponseEntity.ok(result);
     }
 
-    // ================= INGREDIENT ENDPOINTS =================
 
     @GetMapping("/ingredients")
     @Operation(summary = "Get all active ingredients", description = "Retrieves a list of all active ingredients")
